@@ -1,0 +1,101 @@
+﻿using DentalStudioScheduler.Context;
+using DentalStudioScheduler.Data.Extensions;
+using DentalStudioScheduler.Data.Localization;
+using DentalStudioScheduler.Data.Models;
+using DentalStudioScheduler.Data.ViewModels.Filters;
+using DentalStudioScheduler.Model;
+using DentalStudioScheduler.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
+
+namespace DentalStudioScheduler.Services
+{
+    public class AppointmentService
+    {
+        private readonly DentalStudioContext _context;
+
+        public AppointmentService(DentalStudioContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<AppointmentViewModel>> GetAllAppointmentAsync()
+        { 
+            var appointments = await _context.Appointments
+                .OrderBy(x => x.Date)
+                .ToAppointmentVM()
+                .ToListAsync();
+
+            return appointments;
+        }
+
+        /* ------------------------------ Get by Id Async ---------------------------- */
+        public async Task<AppointmentViewModel> GetAppointmentByIdAsync(Guid appointmentId)
+        {
+            var appointment = await _context.Appointments.Where(x => x.AppointmentId == appointmentId)
+                .ToAppointmentVM()
+                .FirstOrDefaultAsync();
+
+            if (appointment == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, TranslationStrings.COMMON_NOT_FOUND);
+            }
+
+            return appointment;
+        }
+
+        /* ------------------------------ Find Async --------------------------------- */
+        //public async Task<PageResult<AppointmentViewModel>> FindAppointmentsAsync(FilterAppointmentViewModel filter, int page, int size)
+        //{
+        //}
+
+        /* ------------------------------ Create or Update Async --------------------- */
+        public async Task<Guid> CreateOrUpdateAppointmentAsync(Appointment model, string userRef)
+        {
+            model.PatientFirstName = model.PatientFirstName.Trim();
+            model.PatientLastName = model.PatientLastName.Trim();
+
+            var appointment = await _context.Appointments.FirstOrDefaultAsync(x => x.AppointmentId == model.AppointmentId);
+            if (await _context.Appointments.AnyAsync(x => (x.PatientFirstName == model.PatientFirstName && x.PatientLastName == model.PatientLastName && x.Date == model.Date) && x.AppointmentId != model.AppointmentId))
+            {
+                throw new HttpException(HttpStatusCode.BadRequest, TranslationStrings.ACTIVITY_CODE_DUPLICATE);
+            }
+
+            if (appointment == null)
+            {
+                appointment = new Appointment();
+                _context.Appointments.Add(appointment);
+                model.IsCompleted = false;
+                model.IsConfirmed = false;
+            }
+
+            appointment.Date = model.Date;
+            appointment.TimeSlot = model.TimeSlot;
+            appointment.PatientFirstName = model.PatientFirstName;
+            appointment.PatientLastName = model.PatientLastName;
+            appointment.PatientTelephoneNumber = model.PatientTelephoneNumber;
+            appointment.TreatmentType = model.TreatmentType;
+            appointment.IsConfirmed = model.IsConfirmed;
+            appointment.IsCompleted = model.IsCompleted;
+            appointment.Notes = model.Notes;
+            appointment.UpdateBase(userRef: userRef);
+
+            await _context.SaveChangesAsync();
+            return appointment.AppointmentId;
+        }
+
+        /* ------------------------------ Delete Async ------------------------------- */
+        public async Task DeleteAppointmentAsync(Guid appointmentId)
+        {
+            var item = await _context.Appointments.FirstOrDefaultAsync(x => x.AppointmentId == appointmentId);
+
+            if (item == null)
+            {
+                throw new HttpException(HttpStatusCode.NotFound, TranslationStrings.COMMON_NOT_FOUND);
+            }
+
+            _context.Appointments.Remove(item);
+            await _context.SaveChangesAsync();
+        }
+    }
+}
