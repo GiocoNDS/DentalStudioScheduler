@@ -5,6 +5,7 @@ using DentalStudioScheduler.Data.Models;
 using DentalStudioScheduler.Data.ViewModels.Filters;
 using DentalStudioScheduler.Model;
 using DentalStudioScheduler.Models;
+using DentalStudioScheduler.Services.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -45,9 +46,53 @@ namespace DentalStudioScheduler.Services
         }
 
         /* ------------------------------ Find Async --------------------------------- */
-        //public async Task<PageResult<AppointmentViewModel>> FindAppointmentsAsync(FilterAppointmentViewModel filter, int page, int size)
-        //{
-        //}
+        public async Task<PageResult<AppointmentViewModel>> FindAppointmentsAsync(FilterAppointmentViewModel filter, int page, int size)
+        {
+            var query = _context.Appointments.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter.PatientFirstName))
+            {
+                query = query.Where(x => x.PatientFirstName.Contains(filter.PatientFirstName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.PatientLastName))
+            {
+                query = query.Where(x => x.PatientLastName.Contains(filter.PatientLastName));
+            }
+
+            if (filter.Date.HasValue)
+            {
+                query = query.Where(x => x.Date == filter.Date);
+            }
+
+            if (filter.TreatmentType.HasValue)
+            {
+                query = query.Where(x => x.TreatmentType == filter.TreatmentType);
+            }
+
+            if (filter.IsConfirmed.HasValue)
+            {
+                query = query.Where(x => x.IsConfirmed == filter.IsConfirmed);
+            }
+
+            if (filter.IsCompleted.HasValue)
+            {
+                query = query.Where(x => x.IsCompleted == filter.IsCompleted);
+            }
+
+            // D Y N A M I C   S O R T
+
+            query.OrderBy(x => x.Date);
+
+            return new PageResult<AppointmentViewModel>()
+            {
+                CollectionSize = await query.CountAsync(),
+                Result = await query
+                .Paginate(page, size)
+                .ToAppointmentVM()
+                .ToListAsync()
+            };
+        }
 
         /* ------------------------------ Create or Update Async --------------------- */
         public async Task<Guid> CreateOrUpdateAppointmentAsync(Appointment model, string userRef)

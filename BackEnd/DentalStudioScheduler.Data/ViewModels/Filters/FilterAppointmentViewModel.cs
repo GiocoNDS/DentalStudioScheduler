@@ -10,6 +10,6 @@ namespace DentalStudioScheduler.Data.ViewModels.Filters
         public DateTime? Date { get; set; }
         public TreatmentType? TreatmentType { get; set; }
         public bool? IsConfirmed { get; set; }
-        public bool? IsCompletedd { get; set; }
+        public bool? IsCompleted { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using DentalStudioScheduler.Services;
 using Microsoft.AspNetCore.Mvc;
 using DentalStudioScheduler.Models;
+using DentalStudioScheduler.Data.ViewModels.Filters;
 
 namespace DentalStudioScheduler.Controllers
 {
@@ -32,13 +33,13 @@ namespace DentalStudioScheduler.Controllers
         }
         /* ------------------------------ P O S T ------------------------------ */
 
-        //[HttpPost("find")]
-        //public async Task<IActionResult> FindAppointments([FromBody] FilterAppointmentViewModel filter, [FromQuery] int page, [FromQuery] int size)
-        //{
-        //    var result = await _appointmentService.FindAppointmentsAsync(filter, page, size);
+        [HttpPost("find")]
+        public async Task<IActionResult> FindAppointments([FromBody] FilterAppointmentViewModel filter, [FromQuery] int page, [FromQuery] int size)
+        {
+            var result = await _appointmentService.FindAppointmentsAsync(filter, page, size);
 
-        //    return Ok(result);
-        //}
+            return Ok(result);
+        }
 
         /* ------------------------------ P U T ------------------------------ */
 
