@@ -7,6 +7,7 @@ using DentalStudioScheduler.Model;
 using DentalStudioScheduler.Models;
 using DentalStudioScheduler.Services.Base;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Net;
 
 namespace DentalStudioScheduler.Services
@@ -21,7 +22,7 @@ namespace DentalStudioScheduler.Services
         }
 
         public async Task<List<AppointmentViewModel>> GetAllAppointmentAsync()
-        { 
+        {
             var appointments = await _context.Appointments
                 .OrderBy(x => x.Date)
                 .ToAppointmentVM()
@@ -43,6 +44,22 @@ namespace DentalStudioScheduler.Services
             }
 
             return appointment;
+        }
+
+        public async Task<List<TimeSpan>> GetAvailableTimeSlotsAsync(DateTime date)
+        {
+            var startHour = 9;
+            var endHour = 17;
+            var allSlots = Enumerable.Range(startHour, endHour - startHour)
+                                     .Select(h => new TimeSpan(h, 0, 0))
+                                     .ToList();
+
+            var bookedSlots = await _context.Appointments
+                .Where(a => a.Date.Date == date.Date)
+                .Select(a => a.TimeSlot)
+                .ToListAsync();
+
+            return allSlots.Except(bookedSlots).ToList();
         }
 
         /* ------------------------------ Find Async --------------------------------- */
@@ -142,5 +159,6 @@ namespace DentalStudioScheduler.Services
             _context.Appointments.Remove(item);
             await _context.SaveChangesAsync();
         }
+
     }
 }

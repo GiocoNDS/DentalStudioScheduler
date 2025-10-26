@@ -31,6 +31,14 @@ namespace DentalStudioScheduler.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("{date}")]
+        public async Task<IActionResult> GetAvailableSlots([FromQuery] DateTime date)
+        {
+            var result = await _appointmentService.GetAvailableTimeSlotsAsync(date);
+
+            return Ok(result);
+        }
         /* ------------------------------ P O S T ------------------------------ */
 
         [HttpPost("find")]

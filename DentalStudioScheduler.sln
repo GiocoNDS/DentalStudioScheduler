@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalStudioScheduler", "Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalStudioScheduler.Data", "BackEnd\DentalStudioScheduler.Data\DentalStudioScheduler.Data.csproj", "{B8FE35B3-CEB5-9362-093B-8AFAF5A33A0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mch.Internal.UnifiedContextDb.Test_Net8", "Test\DentalStudioScheduler.Test_Net8\Mch.Internal.UnifiedContextDb.Test_Net8.csproj", "{5D155A9A-2781-CEA5-6009-67AAC378AF80}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalStudioScheduler.Context", "BackEnd\DentalStudioScheduler.Contetx\DentalStudioScheduler.Context.csproj", "{E2FBBA9B-D5F4-5672-1FC7-CDC78F6FF029}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalStudioScheduler.Services", "BackEnd\DentalStudioScheduler.Services\DentalStudioScheduler.Services.csproj", "{87B366F7-4728-97C2-85DD-A5CC881E677B}"
@@ -38,10 +36,6 @@ Global
 		{B8FE35B3-CEB5-9362-093B-8AFAF5A33A0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8FE35B3-CEB5-9362-093B-8AFAF5A33A0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8FE35B3-CEB5-9362-093B-8AFAF5A33A0B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D155A9A-2781-CEA5-6009-67AAC378AF80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D155A9A-2781-CEA5-6009-67AAC378AF80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D155A9A-2781-CEA5-6009-67AAC378AF80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D155A9A-2781-CEA5-6009-67AAC378AF80}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E2FBBA9B-D5F4-5672-1FC7-CDC78F6FF029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E2FBBA9B-D5F4-5672-1FC7-CDC78F6FF029}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2FBBA9B-D5F4-5672-1FC7-CDC78F6FF029}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,7 +51,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{108A9174-37F3-FD4B-E2EF-CA78C80A96A7} = {A6BCC4DB-A496-4F3B-BA68-363BEF6A98CD}
 		{B8FE35B3-CEB5-9362-093B-8AFAF5A33A0B} = {A6BCC4DB-A496-4F3B-BA68-363BEF6A98CD}
-		{5D155A9A-2781-CEA5-6009-67AAC378AF80} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{E2FBBA9B-D5F4-5672-1FC7-CDC78F6FF029} = {A6BCC4DB-A496-4F3B-BA68-363BEF6A98CD}
 		{87B366F7-4728-97C2-85DD-A5CC881E677B} = {A6BCC4DB-A496-4F3B-BA68-363BEF6A98CD}
 	EndGlobalSection
